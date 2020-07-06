@@ -1,13 +1,9 @@
 package andrew.projects.reacon.entities;
 
-import andrew.projects.reacon.enums.ParticipantTypes;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Data
 @NoArgsConstructor
@@ -18,6 +14,8 @@ public class Participant {
     private Integer idParticipant;
     private Integer idUser;
     private Integer idConversation;
-    private ParticipantTypes typeOfParticipant;
+    @Column(columnDefinition = "varchar(255) default 'User'")
+    private String typeOfParticipant;
+    @Column(columnDefinition = "boolean default 0")
     private Boolean isBlocked;
 }

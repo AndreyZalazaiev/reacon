@@ -1,6 +1,5 @@
 package andrew.projects.reacon.entities;
 
-import andrew.projects.reacon.enums.ConversationTypes;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.lang.NonNull;
@@ -15,7 +14,8 @@ public class Conversation {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer idConversation;
-    private ConversationTypes conversationType;
+    @Column(columnDefinition = "varchar(255) default 'Chat'")
+    private String conversationType;
     @NonNull
     @Column(columnDefinition = "varchar(255) default 'Simple group'")
     private String converstaionName;

@@ -1,7 +1,6 @@
 package andrew.projects.reacon.entities;
 
-import andrew.projects.reacon.enums.ConversationTypes;
-import andrew.projects.reacon.enums.ParticipantTypes;
+
 import andrew.projects.reacon.repos.ConversationRepo;
 import andrew.projects.reacon.repos.ParicipantRepo;
 import lombok.val;
@@ -28,7 +27,7 @@ public class ConversationTest {
     public void CreatingConversationTest()
     {
         Conversation conversation = new Conversation();
-        conversation.setConversationType(ConversationTypes.Group);
+        conversation.setConversationType("Group");
         val currentlyInDb = testEntityManager.persist(conversation);
         Assert.assertEquals(conversation,currentlyInDb);
     }
@@ -38,7 +37,7 @@ public class ConversationTest {
         Participant p = new Participant();
         p.setIdUser(1);
         p.setIsBlocked(false);
-        p.setTypeOfParticipant(ParticipantTypes.Admin);
+        p.setTypeOfParticipant("Admin");
         paricipantRepo.save(p);
 /* i`m weak at testing, later
         Conversation conversation = new Conversation();

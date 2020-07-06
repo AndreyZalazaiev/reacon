@@ -1,6 +1,5 @@
 package andrew.projects.reacon.entities;
 
-import andrew.projects.reacon.enums.ParticipantTypes;
 import andrew.projects.reacon.repos.ParicipantRepo;
 import andrew.projects.reacon.repos.UserRepo;
 import org.junit.Assert;
@@ -27,7 +26,7 @@ public class ParicipantTest {
         Participant p = new Participant();
         p.setIdUser(1);
         p.setIsBlocked(false);
-        p.setTypeOfParticipant(ParticipantTypes.Admin);
+        p.setTypeOfParticipant("Admin");
         paricipantRepo.save(p);
         Participant currentlyInDb=testEntityManager.persist(p);
         Assert.assertEquals(p,currentlyInDb);
