@@ -27,7 +27,6 @@ public class UserTest {
         User usr = new User();
         usr.setFullName("Petya Petrov");
         usr.setEmail("sdad@mail.ru");
-        usr.setLastTimeOnline(new Date());
         userRepo.save(usr);
         User currentlyInDb = testEntityManager.persist(usr);
         Assert.assertEquals(currentlyInDb,userRepo.findById(currentlyInDb.getIdUser()).get());

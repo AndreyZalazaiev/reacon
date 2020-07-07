@@ -13,5 +13,5 @@ public interface MessageRepo extends CrudRepository<Message, Integer> {
     @Query("select m from Message m ,Conversation c " +
             "where m.idConversation=:currentChatId " +
             "group by m.idMessage")
-    Iterable<User> allMessagesInChat(@Param("currentChatId") Integer id);//todo test
+    Iterable<Message> allMessagesInChat(@Param("currentChatId") Integer id);//todo test
 }
