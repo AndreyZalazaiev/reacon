@@ -35,18 +35,24 @@ public class ConversationTest {
     public void AddParticipantsToConversation()
     {
         Participant p = new Participant();
+        InitializeParticipant(p);
+
+        Conversation conversation = new Conversation();
+        conversation.setConversationType("Group");
+        conversation.addParticipant(p);
+        val conversationInDb = testEntityManager.persist(conversation);
+        Assert.assertEquals(conversation,conversationInDb);
+        Assert.assertEquals(conversation.getParticipants().contains(p),true);
+
+
+    }
+    public void InitializeParticipant(Participant p)
+    {
         p.setIdUser(1);
         p.setIsBlocked(false);
         p.setTypeOfParticipant("Admin");
         paricipantRepo.save(p);
-/* i`m weak at testing, later
-        Conversation conversation = new Conversation();
-        conversation.setConversationType(ConversationTypes.Group);
-        conversation.setParticipant(p);
-        conversationRepo.save(conversation);
-        val currentConversationInDb = testEntityManager.persist(conversation);
-        Assert.assertEquals(1,currentConversationInDb);
-        */
-
+        val participantInDb = testEntityManager.persist(p);
+        Assert.assertEquals(p,participantInDb);
     }
 }

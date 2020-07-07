@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.lang.NonNull;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -19,18 +20,17 @@ public class Conversation {
     @NonNull
     @Column(columnDefinition = "varchar(255) default 'Simple group'")
     private String converstaionName;
+
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "idConversation", referencedColumnName = "idConversation")
-    private List<Participant> participants;
-
+    private List<Participant> participants = new ArrayList<>();
     public void addParticipant(Participant p) {
         participants.add(p);
     }
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "idConversation", referencedColumnName = "idConversation")
-    private List<Message> messages;
-
+    private List<Message> messages = new ArrayList<>();
     public void addMessages(Message m) {
         messages.add(m);
     }

@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -20,14 +22,13 @@ public class User {
     private Integer idUser;
     private String email;
     private String fullName;
-    @Column(columnDefinition = "date default curdate() ")
-    private Date lastTimeOnline;
+    private LocalDateTime lastTimeOnline;
     private String login;
     private String pass;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "idUser", referencedColumnName = "idUser")
-    private List<Participant> participant;
+    private List<Participant> participant = new ArrayList<>();
 
     public void addParticipant(Participant p) {
         participant.add(p);
@@ -35,11 +36,15 @@ public class User {
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "idUser", referencedColumnName = "idUser")
-    private List<Message> messages;
+    private List<Message> messages = new ArrayList<>();
     public void addMessgaes(Message m) {
         messages.add(m);
     }
 
+    @PrePersist
+    protected void onCreate() {
+       lastTimeOnline = LocalDateTime.now();
+    }
 
 
 }

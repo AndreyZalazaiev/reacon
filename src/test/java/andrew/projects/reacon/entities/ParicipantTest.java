@@ -21,7 +21,7 @@ public class ParicipantTest {
     @Autowired
     TestEntityManager testEntityManager;
     @Test
-    public void participatingTest()
+    public void creatingParticipantTest()
     {
         Participant p = new Participant();
         p.setIdUser(1);
