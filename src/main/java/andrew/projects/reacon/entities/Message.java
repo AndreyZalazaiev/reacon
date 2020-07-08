@@ -28,6 +28,7 @@ public class Message {
     public void addAttachment(Attachment a) {
         attachments.add(a);
     }
+
     @PrePersist
     protected void onCreate() {
         sentDate = LocalDateTime.now();

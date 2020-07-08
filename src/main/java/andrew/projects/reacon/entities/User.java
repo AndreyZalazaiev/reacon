@@ -3,6 +3,7 @@ package andrew.projects.reacon.entities;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.Query;
 
 
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -29,7 +31,6 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "idUser", referencedColumnName = "idUser")
     private List<Participant> participant = new ArrayList<>();
-
     public void addParticipant(Participant p) {
         participant.add(p);
     }
@@ -40,6 +41,10 @@ public class User {
     public void addMessgaes(Message m) {
         messages.add(m);
     }
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles;
 
     @PrePersist
     protected void onCreate() {
