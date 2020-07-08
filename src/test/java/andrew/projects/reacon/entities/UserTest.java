@@ -25,10 +25,12 @@ public class UserTest {
     @Test
     public  void CreatingUserTest(){
         User usr = new User();
+        usr.setIdUser("222");
         usr.setFullName("Petya Petrov");
         usr.setEmail("sdad@mail.ru");
         userRepo.save(usr);
+        testEntityManager.detach(usr);
         User currentlyInDb = testEntityManager.persist(usr);
-        Assert.assertEquals(currentlyInDb,userRepo.findById(currentlyInDb.getIdUser()).get());
+        Assert.assertEquals(currentlyInDb,userRepo.findByIdUser(currentlyInDb.getIdUser()));
     }
 }
