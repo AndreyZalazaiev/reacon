@@ -5,9 +5,11 @@ import andrew.projects.reacon.entities.User;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.criteria.CriteriaBuilder;
 
+@Transactional
 public interface MessageRepo extends CrudRepository<Message, Integer> {
 
     @Query("select m from Message m ,Conversation c " +

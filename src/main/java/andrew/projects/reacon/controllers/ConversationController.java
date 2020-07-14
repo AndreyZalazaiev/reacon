@@ -5,26 +5,30 @@ import andrew.projects.reacon.entities.User;
 import andrew.projects.reacon.repos.ConversationRepo;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
-@Controller
+@RestController
+@RequestMapping("conversations")
 public class ConversationController {
     @Autowired
     ConversationRepo conversationRepo;
-    @GetMapping(path = "/chats")
+
+    @GetMapping("/all/{idUser}")
     public @ResponseBody
-    Iterable<Conversation> getAllChats() {
-        return conversationRepo.findAllChatsForUserById(1);
+    Iterable<Conversation> getAllChats(@PathVariable String idUser) {
+        return conversationRepo.findAllChatsForUserById(idUser);
     }
-    @GetMapping(path = "/users")
+
+    @GetMapping("/users/{idConversation}")
     public @ResponseBody
-    Iterable<User> getAllUsersInChat() {
-        return conversationRepo.findAllUsersInChat(2);
+    Iterable<User> getAllUsersInChat(@PathVariable Integer idConversation) {
+        return conversationRepo.findAllUsersInChat(idConversation);
     }
+  /*  @GetMapping("/last/{idConversation}")
+    public @ResponseBody
+    Iterable<User> lastMessageInChat(@PathVariable Integer idConversation) {
+        return conversationRepo.findLastMessageInChat(idConversation);
+    }*/
+
 
 }

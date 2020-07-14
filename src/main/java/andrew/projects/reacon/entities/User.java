@@ -1,5 +1,6 @@
 package andrew.projects.reacon.entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,10 +18,12 @@ public class User {
     @Id
     private String idUser;
     private String fullName;
+    @Column(columnDefinition = "varchar(255) default 'https://i.stack.imgur.com/34AD2.jpg'")
     private String userpic;
     private String email;
     private String gender;
     private String locale;
+    //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "mm:hh mm-dd")
     private LocalDateTime lastTimeOnline;
 
     @OneToMany(cascade = CascadeType.ALL)

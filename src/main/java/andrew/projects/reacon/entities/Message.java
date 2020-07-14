@@ -1,5 +1,6 @@
 package andrew.projects.reacon.entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -18,7 +19,8 @@ public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer idMessage;
-    private Integer idUser;
+    private String idUser;
+    //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "mm:hh mm-dd")
     private LocalDateTime sentDate;
     private Integer idConversation;
     private String text;

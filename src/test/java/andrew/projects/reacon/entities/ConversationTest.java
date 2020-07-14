@@ -2,7 +2,7 @@ package andrew.projects.reacon.entities;
 
 
 import andrew.projects.reacon.repos.ConversationRepo;
-import andrew.projects.reacon.repos.ParicipantRepo;
+import andrew.projects.reacon.repos.ParticipantRepo;
 import lombok.val;
 import org.junit.Assert;
 import org.junit.Test;
@@ -20,7 +20,7 @@ public class ConversationTest {
     @Autowired
     ConversationRepo conversationRepo;
     @Autowired
-    ParicipantRepo paricipantRepo;
+    ParticipantRepo participantRepo;
     @Autowired
     TestEntityManager testEntityManager;
     @Test
@@ -48,10 +48,10 @@ public class ConversationTest {
     }
     public void InitializeParticipant(Participant p)
     {
-        p.setIdUser(1);
+        p.setIdUser("1");
         p.setIsBlocked(false);
         p.setTypeOfParticipant("Admin");
-        paricipantRepo.save(p);
+        participantRepo.save(p);
         val participantInDb = testEntityManager.persist(p);
         Assert.assertEquals(p,participantInDb);
     }

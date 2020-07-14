@@ -1,10 +1,14 @@
 package andrew.projects.reacon.entities;
 
+import andrew.projects.reacon.Util.DateFormater;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.springframework.lang.NonNull;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,9 +21,12 @@ public class Conversation {
     private Integer idConversation;
     @Column(columnDefinition = "varchar(255) default 'Chat'")
     private String conversationType;
+    private LocalDateTime lastMessageDate;
     @NonNull
     @Column(columnDefinition = "varchar(255) default 'Simple group'")
-    private String converstaionName;
+    private String conversationName;
+    @Column(columnDefinition = "varchar(255) default 'images/chat.png'")
+    private String conversationImage;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "idConversation", referencedColumnName = "idConversation")
@@ -34,4 +41,12 @@ public class Conversation {
     public void addMessages(Message m) {
         messages.add(m);
     }
+
+    @PreUpdate
+    protected void onUpdate() {
+        lastMessageDate= LocalDateTime.now();
+    }
+    @PrePersist
+    protected void onCreate(){lastMessageDate= LocalDateTime.now();}
+
 }

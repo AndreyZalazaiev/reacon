@@ -1,7 +1,6 @@
 package andrew.projects.reacon.entities;
 
-import andrew.projects.reacon.repos.ParicipantRepo;
-import andrew.projects.reacon.repos.UserRepo;
+import andrew.projects.reacon.repos.ParticipantRepo;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,7 +15,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class ParicipantTest {
     @Autowired
-    ParicipantRepo paricipantRepo;
+    ParticipantRepo participantRepo;
 
     @Autowired
     TestEntityManager testEntityManager;
@@ -24,10 +23,10 @@ public class ParicipantTest {
     public void creatingParticipantTest()
     {
         Participant p = new Participant();
-        p.setIdUser(1);
+        p.setIdUser("1");
         p.setIsBlocked(false);
         p.setTypeOfParticipant("Admin");
-        paricipantRepo.save(p);
+        participantRepo.save(p);
         Participant currentlyInDb=testEntityManager.persist(p);
         Assert.assertEquals(p,currentlyInDb);
 

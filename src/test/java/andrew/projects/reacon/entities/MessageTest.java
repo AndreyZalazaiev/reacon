@@ -25,7 +25,7 @@ public class MessageTest {
     public void  CreatingMessageTest()
     {
         Message msg = new Message();
-        msg.setIdUser(1);
+        msg.setIdUser("1");
         msg.setIdConversation(1);
         msg.setText("Hey this is a test msg");
         msg.setAttachments(null);
@@ -37,7 +37,7 @@ public class MessageTest {
     public void AutomaticallySettingDateOnMessage()
     {
         Message msg = new Message();
-        msg.setIdUser(1);
+        msg.setIdUser("1");
         msg.setIdConversation(1);
         msg.setText("Hey this is a test msg");
         msg.setAttachments(null);

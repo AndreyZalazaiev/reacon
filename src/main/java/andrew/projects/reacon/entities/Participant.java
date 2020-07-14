@@ -12,7 +12,7 @@ public class Participant {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idParticipant;
-    private Integer idUser;
+    private String idUser;
     private Integer idConversation;
     @Column(columnDefinition = "varchar(255) default 'User'")
     private String typeOfParticipant;
