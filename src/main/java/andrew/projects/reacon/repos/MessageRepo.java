@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.criteria.CriteriaBuilder;
 
-@Transactional
 public interface MessageRepo extends CrudRepository<Message, Integer> {
 
     @Query("select m from Message m ,Conversation c " +

@@ -9,7 +9,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
 public interface ParticipantRepo extends JpaRepository<Participant,Integer> {
     @Query("select p from Participant p " +
             "WHERE  p.idConversation=:idConversation " +

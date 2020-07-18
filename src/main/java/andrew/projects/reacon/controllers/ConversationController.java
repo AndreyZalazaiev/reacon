@@ -3,8 +3,9 @@ package andrew.projects.reacon.controllers;
 import andrew.projects.reacon.entities.Conversation;
 import andrew.projects.reacon.entities.User;
 import andrew.projects.reacon.repos.ConversationRepo;
-import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -14,13 +15,13 @@ public class ConversationController {
     ConversationRepo conversationRepo;
 
     @GetMapping("/all/{idUser}")
-    public @ResponseBody
+    public
     Iterable<Conversation> getAllChats(@PathVariable String idUser) {
         return conversationRepo.findAllChatsForUserById(idUser);
     }
 
     @GetMapping("/users/{idConversation}")
-    public @ResponseBody
+    public
     Iterable<User> getAllUsersInChat(@PathVariable Integer idConversation) {
         return conversationRepo.findAllUsersInChat(idConversation);
     }

@@ -8,7 +8,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 
-@Transactional
 public interface ConversationRepo extends CrudRepository<Conversation, Integer> {
     @Query(value = "Select c.id_conversation,c.conversation_name,c.conversation_type,c.conversation_image,c.last_message_date " +
             "From conversation c, participant,user\n" +
