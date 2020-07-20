@@ -1,6 +1,7 @@
 package andrew.projects.reacon.entities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -12,7 +13,6 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @Entity
-@AllArgsConstructor
 public class User {
     @Id
     private String idUser;
@@ -24,14 +24,14 @@ public class User {
     private String locale;
     //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "mm:hh mm-dd")
     private LocalDateTime lastTimeOnline;
-
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "idUser", referencedColumnName = "idUser")
     private List<Participant> participant = new ArrayList<>();
     public void addParticipant(Participant p) {
         participant.add(p);
     }
-
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "idUser", referencedColumnName = "idUser")
     private List<Message> messages = new ArrayList<>();

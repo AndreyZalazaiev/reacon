@@ -24,7 +24,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/", "/login**", "/js/**", "/error**","/webjars/**").permitAll()
                 .anyRequest().authenticated()
-                .and().logout().logoutSuccessUrl("/").permitAll();
+                .and().logout().logoutSuccessUrl("/").permitAll()
+                .and().logout().logoutSuccessUrl("/");
     }
     @Bean
     public PrincipalExtractor principalExtractor(UserRepo userRepo) {

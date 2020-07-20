@@ -50,7 +50,7 @@ img{ max-width:100%;}
   width: 88%;
 }
 
-.single_chat{ overflow:hidden; clear:both; padding: 6px;}
+.single_chat{ overflow:hidden; clear:both; padding: 6px; margin-bottom: 10px;}
 .chat_list {
   border-bottom: 1px solid #c4c4c4;
   margin: 0;

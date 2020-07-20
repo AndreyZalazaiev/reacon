@@ -1,42 +1,47 @@
-var messageApi = Vue.resource('/messages/all/1')
-var conversationApi = Vue.resource('/conversations/all/101276394831723524679')
+
+var messageApi = Vue.resource('/messages/all{/idConversation}');
+var conversationApi = Vue.resource('/conversations/all{/idUser}');
+var userApi=Vue.resource('user{/idUser}');
 
 var token = $("meta[name='_csrf']").attr("content");
 var header = $("meta[name='_csrf_header']").attr("content");
-Vue.http.headers.common['X-CSRF-TOKEN'] =token;
-/*console.log(Vue.http.headers.common['X-CSRF-TOKEN']);
+Vue.http.headers.common['X-CSRF-TOKEN'] = token;
 
-const headers = new Headers({
-    'Content-Type': header,
-    'X-CSRF-TOKEN': token
-});
-var a = fetch('http://localhost:8080/conversations/all/101276394831723524679',headers)
-    .then((response=>console.log(response.text().then(data=>console.log(data)))));
-Vue.component('group-row', {
-    template: ''
-});*/
+
+const eventBus = new Vue();
+
+
 Vue.component('groups-list', {
-    props: ['groups'],
-    template: '<div><div v-for ="group in groups">' +
-        '<div class="single_chat">\n' +
+    props: ['groups', 'id'],
+    template: '<div> <div v-for ="group in groups">' +
+        '<div class="single_chat" @click="loadMsg(group.idConversation)">\n' +
         '    <div class="chat_img"> ' +
         '<img :src="group.conversationImage" alt="failed to load"/>' +
         ' </div>\n' +
         '    <div class="chat_ib">\n' +
         '        <h5>{{group.conversationName}} <span class="chat_date">{{group.lastMessageDate}}</span></h5>\n' +
         '        <p></p>\n' +
-        '    </div></div>  </div></div>',
+        '    </div></div>  </div></div>'
+    ,
+    methods: {
+        loadMsg(idConversation) {
+            eventBus.$emit('loadMessages', idConversation)
+        }
+    }
 });
 
 var groupsApp = new Vue({
     el: '#load_groups',
-    template: '<groups-list :groups="groups"/>',
+    template: '<groups-list :groups="groups"' +
+        ':id="id"/>',
     data: {
-        groups : [],
-       // profile: userData
+        groups: [],
+        id: idUser,
+        name: name,
+        pictrue: picture
     },
     created: function () {
-        conversationApi.get().then(result =>
+        conversationApi.get({idUser: this.id}).then(result =>
             result.json().then(data =>
                 data.forEach(group => this.groups.push(group))
             )
@@ -47,26 +52,64 @@ var groupsApp = new Vue({
 
 
 Vue.component('messages-list', {
-    props: ['messages'],
-    template: '<div><div v-for ="msg in messages"> <div class="outgoing_msg">\n' +
-        '                        <div class="sent_msg">\n' +
+    props: ['messages','id'],
+    template: '<div v-if="messages"><div v-for ="msg in messages"> <div class="outgoing_msg">\n' +
+        '                        <div v-if="msg.idUser=id" class="sent_msg">\n' +
         '                            <p>{{msg.text}}</p>\n' +
         '                            <span class="time_date">{{msg.sentDate}}</span> </div>\n' +
-        '                    </div>'+
-        '</div></div>'
+        '                        <div v-else class="received_msg">\n' +
+        '                            <div class="received_withd_msg">\n' +
+        '                                <p>{{msg.text}}</p>\n' +
+        '                                <span class="time_date">{{msg.sentDate}}</span></div>\n' +
+        '                        </div>' +
+        '                    </div>' +
+
+        '</div></div>',
+    methods: {
+      loadUserData(idUser) {
+            var user;
+            userApi.get({idUser:idUser }).then(result =>
+                result.json().then(data => user=data));
+            if (user)
+            {
+                return user;
+            }
+            else {
+                return null;
+            }
+        }
+    },
+
 });
-var messagesApp= new Vue({
+var messagesApp = new Vue({
     el: '#load_messages',
-    template: '<messages-list :messages="messages"/>',
+    template: '<messages-list :messages="messages"' +
+                ':id="id"/>',
     data: {
-        messages: []
+        messages: [],
+        id:idUser,
+        idConversation: null
+    },
+    methods: {
+        getData(idConversation) {
+            this.messages.length=0;
+            messageApi.get({idConversation: this.idConversation}).then(result =>
+                result.json().then(data =>
+                    data.forEach(msg => this.messages.push(msg))
+                )
+            )
+        }
+    },
+    mounted() {
+        eventBus.$on('loadMessages', (idConversation) => {
+            this.idConversation = idConversation;
+            this.getData(idConversation);
+
+        })
     },
     created: function () {
-        messageApi.
-        get().then(result =>
-            result.json().then(data =>
-                data.forEach(msg => this.messages.push(msg))
-            )
-        )
+        if(this.idConversation)
+        this.getData(this.idConversation)
     },
+
 });
