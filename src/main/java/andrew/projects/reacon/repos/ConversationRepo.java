@@ -9,12 +9,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 public interface ConversationRepo extends CrudRepository<Conversation, Integer> {
-    @Query(value = "Select c.id_conversation,c.conversation_name,c.conversation_type,c.conversation_image,c.last_message_date " +
-            "From conversation c, participant,user\n" +
-            "WHERE c.id_conversation=participant.id_conversation\n" +
-            "and user.id_user = participant.id_user\n" +
-            "and user.id_user=:currentUser",
-            nativeQuery = true)
+    @Query("select c From Conversation  c, Participant p,User u\n" +
+            "WHERE c.idConversation=p.idConversation\n" +
+            "and u.idUser = p.idUser\n" +
+            "and u.idUser=:currentUser")
     Iterable<Conversation> findAllChatsForUserById(@Param("currentUser") String currentUser);
 
     @Query("From User u\n" +

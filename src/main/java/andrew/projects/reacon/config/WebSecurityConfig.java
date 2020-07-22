@@ -18,14 +18,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                .and()
                 .antMatcher("/**")
                 .authorizeRequests()
                 .antMatchers("/", "/login**", "/js/**", "/error**","/webjars/**").permitAll()
                 .anyRequest().authenticated()
                 .and().logout().logoutSuccessUrl("/").permitAll()
-                .and().logout().logoutSuccessUrl("/");
+                .and().csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
     }
     @Bean
     public PrincipalExtractor principalExtractor(UserRepo userRepo) {

@@ -1,14 +1,13 @@
+const eventBus = new Vue();
 
 var messageApi = Vue.resource('/messages/all{/idConversation}');
 var conversationApi = Vue.resource('/conversations/all{/idUser}');
-var userApi=Vue.resource('user{/idUser}');
+var usersApi = Vue.resource('/conversations/users{/idConversation}')
 
 var token = $("meta[name='_csrf']").attr("content");
-var header = $("meta[name='_csrf_header']").attr("content");
 Vue.http.headers.common['X-CSRF-TOKEN'] = token;
 
 
-const eventBus = new Vue();
 
 
 Vue.component('groups-list', {
@@ -28,6 +27,7 @@ Vue.component('groups-list', {
             eventBus.$emit('loadMessages', idConversation)
         }
     }
+
 });
 
 var groupsApp = new Vue({
@@ -51,32 +51,34 @@ var groupsApp = new Vue({
 
 
 
-Vue.component('messages-list', {
-    props: ['messages','id'],
-    template: '<div v-if="messages"><div v-for ="msg in messages"> <div class="outgoing_msg">\n' +
-        '                        <div v-if="msg.idUser=id" class="sent_msg">\n' +
-        '                            <p>{{msg.text}}</p>\n' +
-        '                            <span class="time_date">{{msg.sentDate}}</span> </div>\n' +
-        '                        <div v-else class="received_msg">\n' +
-        '                            <div class="received_withd_msg">\n' +
-        '                                <p>{{msg.text}}</p>\n' +
-        '                                <span class="time_date">{{msg.sentDate}}</span></div>\n' +
-        '                        </div>' +
-        '                    </div>' +
+Vue.component('send-message',{
+    template:'<div><input type="text" size="40"></div>'
+});//todo tomorrow
 
+Vue.component('messages-list', {
+    props: ['messages','currentUserId','users'],
+    template: '<div v-if="messages"><div v-for ="msg in messages"> <div class="outgoing_msg">\n' +
+                                     '<div v-if="msg.idUser==currentUserId">' +
+                                     '<div class="output_msg">{{getUserData(msg.idUser).fullName}}' +
+                                     '<img class="user_avatar" :src="getUserData(msg.idUser).userpic" alt="failed to load"/></div>'+
+         '                            <div  class="sent_msg">\n' +
+        '                            <p>{{msg.text}}</p>\n' +
+        '                            <span class="time_date">{{msg.sentDate}}</span> </div></div>\n' +
+                                            '<div v-else>' +
+                                            '<div class="input_msg"><img class="user_avatar" :src="getUserData(msg.idUser).userpic" alt="failed to load"/>' +
+                                            '{{getUserData(msg.idUser).fullName}}' +
+                                            '</div>'+
+        '                                   <div class="received_msg">\n' +
+        '                                   <div class="received_withd_msg">\n' +
+        '                                   <p>{{msg.text}}</p>\n' +
+        '                                   <span class="time_date">{{msg.sentDate}}</span></div>\n' +
+                                            '</div>' +
+        '                        </div></div>' +
+        '                    </div>' +
         '</div></div>',
     methods: {
-      loadUserData(idUser) {
-            var user;
-            userApi.get({idUser:idUser }).then(result =>
-                result.json().then(data => user=data));
-            if (user)
-            {
-                return user;
-            }
-            else {
-                return null;
-            }
+        getUserData(id) {
+          return this.users.find(usr=>usr.idUser==id);
         }
     },
 
@@ -84,19 +86,23 @@ Vue.component('messages-list', {
 var messagesApp = new Vue({
     el: '#load_messages',
     template: '<messages-list :messages="messages"' +
-                ':id="id"/>',
+                ':currentUserId="currentUserId"' +
+        ':users="users"/>',
     data: {
         messages: [],
-        id:idUser,
+        users:[],
+        currentUserId:idUser,
         idConversation: null
     },
     methods: {
         getData(idConversation) {
-            this.messages.length=0;
+            this.messages=[];
             messageApi.get({idConversation: this.idConversation}).then(result =>
-                result.json().then(data =>
-                    data.forEach(msg => this.messages.push(msg))
-                )
+                result.json().then(data =>this.messages=data)
+            )
+            this.users.length=0;
+            usersApi.get({idConversation: this.idConversation}).then(result =>
+                result.json().then(data =>this.users=data)
             )
         }
     },
@@ -104,12 +110,12 @@ var messagesApp = new Vue({
         eventBus.$on('loadMessages', (idConversation) => {
             this.idConversation = idConversation;
             this.getData(idConversation);
-
         })
+
     },
-    created: function () {
+   /* created: function () {
         if(this.idConversation)
         this.getData(this.idConversation)
-    },
+    },*/
 
 });
