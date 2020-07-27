@@ -9,7 +9,6 @@ Vue.http.headers.common['X-CSRF-TOKEN'] = token;
 
 
 
-
 Vue.component('groups-list', {
     props: ['groups', 'id'],
     template: '<div> <div v-for ="group in groups">' +
@@ -49,14 +48,31 @@ var groupsApp = new Vue({
     },
 });
 
-
-
-Vue.component('send-message',{
-    template:'<div><input type="text" size="40"></div>'
-});//todo tomorrow
+Vue.component('post-message',{
+    props:['idConversation','currentUserId','messages'],
+   data: function(){
+       return{
+           text:''
+       }
+   },
+    template:'<div class="input-group mb-3  write_message" >\n' +
+        '  <input type="text" v-model="text" class="form-control" placeholder="Write Hello!" aria-label="Write Hello!" aria-describedby="basic-addon2">\n' +
+        '  <div class="input-group-append">\n' +
+        '    <button class="btn btn-outline-secondary" type="button" @click="save">Send</button>\n' +
+        '  </div>\n' +
+        '</div>',
+    methods:{
+       save: function () {
+            //Had to use Axious due to bugs in Vue resourses
+            var postUrl="/messages/all?idConversation="+this.idConversation+"&text="+this.text;
+            this.$http.get(postUrl).then(res=>res.json()).then(data=>this.messages.push(data));
+            this.text='';
+       }
+    }
+});
 
 Vue.component('messages-list', {
-    props: ['messages','currentUserId','users'],
+    props: ['messages','currentUserId','users','idConversation'],
     template: '<div v-if="messages"><div v-for ="msg in messages"> <div class="outgoing_msg">\n' +
                                      '<div v-if="msg.idUser==currentUserId">' +
                                      '<div class="output_msg">{{getUserData(msg.idUser).fullName}}' +
@@ -73,8 +89,8 @@ Vue.component('messages-list', {
         '                                   <p>{{msg.text}}</p>\n' +
         '                                   <span class="time_date">{{msg.sentDate}}</span></div>\n' +
                                             '</div>' +
-        '                        </div></div>' +
-        '                    </div>' +
+        '                        </div></div> ' +
+        '                    </div><post-message :idConversation="idConversation" :messages="messages"></post-message>' +
         '</div></div>',
     methods: {
         getUserData(id) {
@@ -87,7 +103,8 @@ var messagesApp = new Vue({
     el: '#load_messages',
     template: '<messages-list :messages="messages"' +
                 ':currentUserId="currentUserId"' +
-        ':users="users"/>',
+        ':users="users"' +
+        ':idConversation="idConversation"/>',
     data: {
         messages: [],
         users:[],
@@ -113,9 +130,4 @@ var messagesApp = new Vue({
         })
 
     },
-   /* created: function () {
-        if(this.idConversation)
-        this.getData(this.idConversation)
-    },*/
-
 });

@@ -20,7 +20,7 @@ import java.util.List;
 @NoArgsConstructor
 public class Message {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idMessage;
     private String idUser;
     //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "mm:hh mm-dd")
