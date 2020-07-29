@@ -153,3 +153,6 @@ img{ max-width:100%;}
     top:624px;
     width: 32%;
 }
+.results{
+    float: right;
+}

@@ -20,6 +20,9 @@ public interface ConversationRepo extends CrudRepository<Conversation, Integer> 
             "Select p.idUser from Participant p\n" +
             "where p.idConversation=:idConversation)")
     Iterable<User> findAllUsersInChat(@Param("idConversation") Integer id);
+
+    @Query("From Conversation c where c.conversationName like %:input%")
+    Iterable<Conversation> search(@Param("input") String input);
   /*  @Query("FROM Message m\n" +
             "Where m.idConversation=:idConversation\n" +
             "and m.sentDate = \n" +

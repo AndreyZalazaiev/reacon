@@ -25,6 +25,10 @@ public class ConversationController {
     Iterable<User> getAllUsersInChat(@PathVariable Integer idConversation) {
         return conversationRepo.findAllUsersInChat(idConversation);
     }
+    @GetMapping("/search/{groupName}")
+    public Iterable<Conversation> search(@PathVariable String groupName){
+         return conversationRepo.search(groupName);
+    }
   /*  @GetMapping("/last/{idConversation}")
     public @ResponseBody
     Iterable<User> lastMessageInChat(@PathVariable Integer idConversation) {

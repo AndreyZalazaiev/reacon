@@ -17,7 +17,7 @@ Vue.component('groups-list', {
         '<img :src="group.conversationImage" alt="failed to load"/>' +
         ' </div>\n' +
         '    <div class="chat_ib">\n' +
-        '        <h5>{{group.conversationName}} <span class="chat_date">{{group.lastMessageDate}}</span></h5>\n' +
+        '        <h5>{{group.conversationName}} <span class="chat_date">{{group.lastMessageDate}} <button>Leave</button></span></h5>\n' +
         '        <p></p>\n' +
         '    </div></div>  </div></div>'
     ,
@@ -65,7 +65,9 @@ Vue.component('post-message',{
        save: function () {
             //Had to use Axious due to bugs in Vue resourses
             var postUrl="/messages/all?idConversation="+this.idConversation+"&text="+this.text;
-            this.$http.get(postUrl).then(res=>res.json()).then(data=>this.messages.push(data));
+            this.$http.get(postUrl)
+                .then(res=>res.json())
+                .then(data=>this.messages.push(data));
             this.text='';
        }
     }
