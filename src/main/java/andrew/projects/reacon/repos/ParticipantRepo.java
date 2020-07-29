@@ -14,4 +14,8 @@ public interface ParticipantRepo extends JpaRepository<Participant,Integer> {
             "WHERE  p.idConversation=:idConversation " +
             "group by p.idUser")
     Iterable<Participant> allParticipantsInChat(@Param("idConversation") Integer id);
+
+    @Query
+    @Transactional
+    void deleteByIdConversationAndIdUser(@Param("idConversation") Integer idConversation,@Param("idUser") String idUser);
 }

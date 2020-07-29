@@ -23,6 +23,7 @@ public interface ConversationRepo extends CrudRepository<Conversation, Integer> 
 
     @Query("From Conversation c where c.conversationName like %:input%")
     Iterable<Conversation> search(@Param("input") String input);
+
   /*  @Query("FROM Message m\n" +
             "Where m.idConversation=:idConversation\n" +
             "and m.sentDate = \n" +

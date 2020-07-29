@@ -1,8 +1,10 @@
 package andrew.projects.reacon.controllers;
 
 import andrew.projects.reacon.entities.Participant;
+import andrew.projects.reacon.entities.User;
 import andrew.projects.reacon.repos.ParticipantRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -20,5 +22,9 @@ public class ParticipantConntroller {
     {
         participantRepo.findById(id)
                 .ifPresent(participant -> participantRepo.delete(participant));
+    }
+    @GetMapping("/delete/{idConversation}")
+    public void  search(@PathVariable Integer idConversation, @AuthenticationPrincipal User user){
+       participantRepo.deleteByIdConversationAndIdUser(idConversation,user.getIdUser());
     }
 }

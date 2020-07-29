@@ -4,6 +4,7 @@ import andrew.projects.reacon.entities.Conversation;
 import andrew.projects.reacon.entities.User;
 import andrew.projects.reacon.repos.ConversationRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +30,7 @@ public class ConversationController {
     public Iterable<Conversation> search(@PathVariable String groupName){
          return conversationRepo.search(groupName);
     }
+
   /*  @GetMapping("/last/{idConversation}")
     public @ResponseBody
     Iterable<User> lastMessageInChat(@PathVariable Integer idConversation) {

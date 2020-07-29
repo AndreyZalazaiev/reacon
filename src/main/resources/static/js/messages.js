@@ -2,6 +2,7 @@ const eventBus = new Vue();
 
 var messageApi = Vue.resource('/messages/all{/idConversation}');
 var conversationApi = Vue.resource('/conversations/all{/idUser}');
+var conversationDelete=Vue.resource('/participants/delete{/idConversation}')
 var usersApi = Vue.resource('/conversations/users{/idConversation}')
 
 var token = $("meta[name='_csrf']").attr("content");
@@ -17,15 +18,18 @@ Vue.component('groups-list', {
         '<img :src="group.conversationImage" alt="failed to load"/>' +
         ' </div>\n' +
         '    <div class="chat_ib">\n' +
-        '        <h5>{{group.conversationName}} <span class="chat_date">{{group.lastMessageDate}} <button>Leave</button></span></h5>\n' +
+        '        <h5>{{group.conversationName}} <span class="chat_date">{{group.lastMessageDate}} <button @click="deleteGroup(group.idConversation)">Leave</button></span></h5>\n' +
         '        <p></p>\n' +
         '    </div></div>  </div></div>'
     ,
     methods: {
         loadMsg(idConversation) {
             eventBus.$emit('loadMessages', idConversation)
+        },
+        deleteGroup(idConversation){
+            conversationDelete.get({idConversation:idConversation}).then(eventBus.$emit("reloadGroups",idConversation));
         }
-    }
+    },
 
 });
 
@@ -39,13 +43,32 @@ var groupsApp = new Vue({
         name: name,
         pictrue: picture
     },
-    created: function () {
-        conversationApi.get({idUser: this.id}).then(result =>
-            result.json().then(data =>
-                data.forEach(group => this.groups.push(group))
-            )
-        )
+    methods:{
+      loadGroups()  {
+          conversationApi.get({idUser: this.id}).then(result =>
+              result.json().then(data =>
+                  data.forEach(group => this.groups.push(group))
+              )
+          )
+      }
     },
+    created: function () {
+        this.loadGroups();
+    },
+    mounted() {
+        eventBus.$on('reloadGroups', (idConversation) => {
+            for (var i=0;i<this.groups.length;i++)
+            {
+                if(this.groups[i].idConversation==idConversation)
+                {
+                    this.groups.splice(i,1);
+                    console.log(this.groups);
+                    break;
+                }
+            }
+        })
+    }
+
 });
 
 Vue.component('post-message',{
