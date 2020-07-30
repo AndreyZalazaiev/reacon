@@ -1,4 +1,4 @@
-const eventBus = new Vue();
+export const eventBus = new Vue();
 
 var messageApi = Vue.resource('/messages/all{/idConversation}');
 var conversationApi = Vue.resource('/conversations/all{/idUser}');
@@ -27,7 +27,8 @@ Vue.component('groups-list', {
             eventBus.$emit('loadMessages', idConversation)
         },
         deleteGroup(idConversation){
-            conversationDelete.get({idConversation:idConversation}).then(eventBus.$emit("reloadGroups",idConversation));
+            conversationDelete.get({idConversation:idConversation})
+                .then(eventBus.$emit("deletedGroup",idConversation));
         }
     },
 
@@ -56,7 +57,7 @@ var groupsApp = new Vue({
         this.loadGroups();
     },
     mounted() {
-        eventBus.$on('reloadGroups', (idConversation) => {
+        eventBus.$on('deletedGroup', (idConversation) => {
             for (var i=0;i<this.groups.length;i++)
             {
                 if(this.groups[i].idConversation==idConversation)
@@ -66,6 +67,9 @@ var groupsApp = new Vue({
                     break;
                 }
             }
+        })
+        eventBus.$on('joinedGroup',(group)=>{
+            this.groups.push(group);
         })
     }
 

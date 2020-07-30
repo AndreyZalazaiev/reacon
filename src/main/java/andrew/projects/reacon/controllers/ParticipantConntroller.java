@@ -17,14 +17,15 @@ public class ParticipantConntroller {
     {
         return participantRepo.allParticipantsInChat(idConversation);
     }
-    @DeleteMapping("{id}")
-            public void delete(@PathVariable Integer id)
-    {
-        participantRepo.findById(id)
-                .ifPresent(participant -> participantRepo.delete(participant));
-    }
     @GetMapping("/delete/{idConversation}")
-    public void  search(@PathVariable Integer idConversation, @AuthenticationPrincipal User user){
-       participantRepo.deleteByIdConversationAndIdUser(idConversation,user.getIdUser());
+    public Participant  delete(@PathVariable Integer idConversation, @AuthenticationPrincipal User user){
+       return participantRepo.deleteByIdConversationAndIdUser(idConversation,user.getIdUser());
+    }
+    @GetMapping("/add/{idConversation}")
+    public Participant add(@PathVariable Integer idConversation, @AuthenticationPrincipal User user){
+        Participant p = new Participant();
+        p.setIdUser(user.getIdUser());
+        p.setIdConversation(idConversation);
+        return participantRepo.save(p);
     }
 }
